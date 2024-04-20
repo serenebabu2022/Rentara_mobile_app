@@ -12,4 +12,6 @@
     <string name="defaultAmount">00</string>
     <string name="enter_amount">Enter Amount</string>
     <string name="addPhotos">Add Photos</string>
+    <string name="action_list">List An Item</string>
+    <string name="action_my_listings">My Listings</string>
 </resources>
