@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.List">
+    tools:context=".fragments.ListFragment">
     <TextView
         android:id="@+id/listTitle"
         android:layout_width="wrap_content"
@@ -125,14 +125,14 @@
         app:layout_constraintVertical_bias="0.391">
 
         <RadioButton
-            android:id="@+id/PayPal"
+            android:id="@+id/Daily"
             android:layout_width="97dp"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="@string/rentDaily" />
 
         <RadioButton
-            android:id="@+id/Direct"
+            android:id="@+id/Weekly"
             android:layout_width="97dp"
             android:layout_height="wrap_content"
             android:checked="false"
