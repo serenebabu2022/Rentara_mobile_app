@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ie.setu.rentara_app.R
 import ie.setu.rentara_app.databinding.CardListingBinding
-import ie.setu.rentara_app.models.ListModel
+import ie.setu.rentara_app.models.RentaraModel
 
-class ListXAdapter constructor(private var rentals: List<ListModel>)
-    : RecyclerView.Adapter<ListXAdapter.MainHolder>() {
+class RentaraXAdapter constructor(private var rentals: List<RentaraModel>)
+    : RecyclerView.Adapter<RentaraXAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardListingBinding
@@ -23,7 +23,7 @@ class ListXAdapter constructor(private var rentals: List<ListModel>)
     override fun getItemCount(): Int = rentals.size
     inner class MainHolder(val binding : CardListingBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(rental: ListModel) {
+        fun bind(rental: RentaraModel) {
             binding.paymentamount.text = rental.price.toString()
             binding.rentalPeriodType.text = rental.rentalPeriodType
             binding.imageIcon.setImageResource(R.mipmap.ic_launcher_round)
