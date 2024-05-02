@@ -1,5 +1,6 @@
 package ie.setu.rentara.ui.listings
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -14,42 +15,56 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.setu.rentara_app.R
+import ie.setu.rentara_app.adapters.RentaraClickListener
 import ie.setu.rentara_app.adapters.RentaraXAdapter
 import ie.setu.rentara_app.databinding.FragmentListingsBinding
 import ie.setu.rentara_app.main.RentaraXApp
+import ie.setu.rentara_app.models.RentaraModel
+import ie.setu.rentara_app.utils.createLoader
+import ie.setu.rentara_app.utils.hideLoader
+import ie.setu.rentara_app.utils.showLoader
 
-class ListingsFragment : Fragment() {
+
+class ListingsFragment : Fragment(),RentaraClickListener {
     lateinit var app: RentaraXApp
     private var _fragBinding: FragmentListingsBinding? = null
+    lateinit var loader : AlertDialog
     private val fragBinding get() = _fragBinding!!
     private lateinit var listingsViewModel: ListingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as RentaraXApp
-//        setHasOptionsMenu(true)
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _fragBinding = FragmentListingsBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = getString(R.string.myListingsTitle)
+        loader = createLoader(requireActivity())
+//        activity?.title = getString(R.string.myListingsTitle)
 setupMenu()
-        listingsViewModel =
-            ViewModelProvider(this).get(ListingsViewModel::class.java)
-        //val textView: TextView = root.findViewById(R.id.text_gallery)
-        listingsViewModel.text.observe(viewLifecycleOwner, Observer {
-            //textView.text = it
+        fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        listingsViewModel = ViewModelProvider(this).get(ListingsViewModel::class.java)
+        showLoader(loader,"Downloading Donations")
+        listingsViewModel.observableRentalsList.observe(viewLifecycleOwner, Observer {
+                rentals ->
+            rentals?.let {
+                render(rentals)
+                hideLoader(loader)
+                checkSwipeRefresh()
+            }
         })
 
-        fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        fragBinding.recyclerView.adapter = RentaraXAdapter(app.rentaraStore.findAll())
+        fragBinding.fab.setOnClickListener {
+            val action = ListingsFragmentDirections.actionListingsFragmentToListFragment()
+            findNavController().navigate(action)
+        }
         return root
     }
     private fun setupMenu() {
@@ -69,24 +84,32 @@ setupMenu()
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+    private fun render(rentalsList: List<RentaraModel>) {
+        fragBinding.recyclerView.adapter = RentaraXAdapter(rentalsList,this)
+        if (rentalsList.isEmpty()) {
+            fragBinding.recyclerView.visibility = View.GONE
+            fragBinding.rentalsNotFound.visibility = View.VISIBLE
+        } else {
+            fragBinding.recyclerView.visibility = View.VISIBLE
+            fragBinding.rentalsNotFound.visibility = View.GONE
+        }
+    }
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swiperefresh.isRefreshing)
+            fragBinding.swiperefresh.isRefreshing = false
+    }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            ListingsFragment().apply {
-                arguments = Bundle().apply { }
-            }
+    override fun onResume() {
+        super.onResume()
+        listingsViewModel.load()
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
     }
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu_my_listings, menu)
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return NavigationUI.onNavDestinationSelected(item,
-//            requireView().findNavController()) || super.onOptionsItemSelected(item)
-//    }
+
+    override fun onListingClick(rental: RentaraModel) {
+        val action = ListingsFragmentDirections.actionListingsFragmentToListingDetailFragment(rental.id)
+        findNavController().navigate(action)
+    }
 }

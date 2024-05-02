@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "468910432088",
+    "project_id": "rentara-e6df6",
+    "storage_bucket": "rentara-e6df6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468910432088:android:cbc47f93a2a6188feecf2d",
+        "android_client_info": {
+          "package_name": "ie.setu.rentara_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoMzIkpYm0G3vanepMSrLahdcDkJgDpMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

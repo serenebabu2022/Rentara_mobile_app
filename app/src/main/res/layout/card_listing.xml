@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:elevation="24dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="rentals"
+            type="ie.setu.rentara_app.models.RentaraModel" />
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@+id/imageIcon"
             android:textSize="24sp"
-            tools:text="€5" />
+           android:text="@{Integer.toString(rentals.price)}"/>
 
         <TextView
             android:id="@+id/rentalPeriodType"
@@ -46,4 +46,4 @@
             android:textSize="24sp" />
 
     </RelativeLayout>
-</androidx.cardview.widget.CardView>
+</layout>

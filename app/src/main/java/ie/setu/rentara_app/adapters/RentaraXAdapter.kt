@@ -7,7 +7,10 @@ import ie.setu.rentara_app.R
 import ie.setu.rentara_app.databinding.CardListingBinding
 import ie.setu.rentara_app.models.RentaraModel
 
-class RentaraXAdapter constructor(private var rentals: List<RentaraModel>)
+interface RentaraClickListener {
+    fun onListingClick(rental: RentaraModel)
+}
+class RentaraXAdapter constructor(private var rentals: List<RentaraModel>,private val listener: RentaraClickListener)
     : RecyclerView.Adapter<RentaraXAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -17,16 +20,20 @@ class RentaraXAdapter constructor(private var rentals: List<RentaraModel>)
         return MainHolder(binding)
     }
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val donation = rentals[holder.adapterPosition]
-        holder.bind(donation)
+        val rental = rentals[holder.adapterPosition]
+        holder.bind(rental,listener)
     }
     override fun getItemCount(): Int = rentals.size
     inner class MainHolder(val binding : CardListingBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(rental: RentaraModel) {
-            binding.paymentamount.text = rental.price.toString()
-            binding.rentalPeriodType.text = rental.rentalPeriodType
+        fun bind(rentals: RentaraModel,listener: RentaraClickListener) {
+            //binding.paymentamount.text = donation.amount.toString()
+            //binding.paymentmethod.text = donation.paymentmethod
+
+            binding.rentals = rentals
             binding.imageIcon.setImageResource(R.mipmap.ic_launcher_round)
+            binding.root.setOnClickListener { listener.onListingClick(rentals) }
+            binding.executePendingBindings()
         }
     }
 }
