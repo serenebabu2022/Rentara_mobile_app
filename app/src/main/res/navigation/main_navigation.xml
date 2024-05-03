@@ -44,7 +44,7 @@
             app:destination="@id/listingsFragment" />
         <argument
             android:name="listingid"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
 
 </navigation>

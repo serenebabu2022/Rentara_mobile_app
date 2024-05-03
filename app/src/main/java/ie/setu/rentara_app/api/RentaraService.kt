@@ -12,19 +12,28 @@ import retrofit2.http.Path
 
 interface RentaraService {
     @GET("/donations")
-    fun getall(): Call<List<RentaraModel>>
+    fun findall(): Call<List<RentaraModel>>
 
-    @GET("/donations/{id}")
-    fun get(@Path("id") id: String): Call<RentaraModel>
+    @GET("/donations/{email}")
+    fun findall(@Path("email") email: String?)
+            : Call<List<RentaraModel>>
 
-    @DELETE("/donations/{id}")
-    fun delete(@Path("id") id: String): Call<RentaraWrapper>
+    @GET("/donations/{email}/{id}")
+    fun get(@Path("email") email: String?,
+            @Path("id") id: String): Call<RentaraModel>
 
-    @POST("/donations")
-    fun post(@Body rental: RentaraModel): Call<RentaraWrapper>
+    @DELETE("/donations/{email}/{id}")
+    fun delete(@Path("email") email: String?,
+               @Path("id") id: String): Call<RentaraWrapper>
 
-    @PUT("/donations/{id}")
-    fun put(@Path("id") id: String,
-            @Body rental: RentaraModel
+    @POST("/donations/{email}")
+    fun post(@Path("email") email: String?,
+             @Body donation: RentaraModel)
+            : Call<RentaraWrapper>
+
+    @PUT("/donations/{email}/{id}")
+    fun put(@Path("email") email: String?,
+            @Path("id") id: String,
+            @Body donation: RentaraModel
     ): Call<RentaraWrapper>
 }

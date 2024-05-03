@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,13 +22,17 @@ import ie.setu.rentara_app.R
 import ie.setu.rentara_app.databinding.FragmentListBinding
 import ie.setu.rentara_app.main.RentaraXApp
 import ie.setu.rentara_app.models.RentaraModel
+import ie.setu.rentara_app.ui.auth.LoggedInViewModel
 
 class ListFragment : Fragment() {
-//    var totalDonate = 0
+    var totalListings = 0
     private var _fragBinding: FragmentListBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val fragBinding get() = _fragBinding!!
     private lateinit var listViewModel: ListViewModel
+
+    private val listingsViewModel: ListingsViewModel by activityViewModels()
+    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -91,7 +96,7 @@ class ListFragment : Fragment() {
                     "Daily" else "Weekly"
 //                app.listStore.create(RentaraModel(rentalPeriodType = rentalType, price = amount))
 //                layout.rentalPeriodType.tex=rentalType
-                listViewModel.addListing(RentaraModel(rentalPeriodType = rentalType , price = amount))
+                listViewModel.addListing(RentaraModel(rentalPeriodType = rentalType , price = amount,email = loggedInViewModel.liveFirebaseUser.value?.email!!))
             }
         }
     }
@@ -102,11 +107,23 @@ class ListFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        val listingsViewModel = ViewModelProvider(this).get(ListingsViewModel::class.java)
-        listingsViewModel.observableRentalsList.observe(viewLifecycleOwner, Observer {
-//            totalDonated = reportViewModel.observableDonationsList.value!!.sumOf { it.amount }
-//            fragBinding.
-//            fragBinding.totalSoFar.text = getString(R.string.totalSoFar,totalDonated)
-        })
+        //try implementing updation of listings count
+//        listingsViewModel.rentalsList.observe(viewLifecycleOwner, { rentals ->
+//            // Filter rentals by user email (replace with your logic to get user email)
+//            val userRentals = rentals.filter { it.email == userEmail }
+//
+//            // Display the number of listings
+//            val numListings = userRentals.count()
+//            val listingsText = "You have $numListings listings."
+//            // Update UI with listingsText
+//        })
+//        totalListings = listingsViewModel.observableRentalsList.value!!.sumOf { it.email==loggedInViewModel.liveFirebaseUser.value?.email!! }
+//
+////        val listingsViewModel = ViewModelProvider(this).get(ListingsViewModel::class.java)
+//        listingsViewModel.observableRentalsList.observe(viewLifecycleOwner, Observer {
+////            totalDonated = reportViewModel.observableDonationsList.value!!.sumOf { it.amount }
+////            fragBinding.
+////            fragBinding.totalSoFar.text = getString(R.string.totalSoFar,totalDonated)
+//        })
     }
 }
