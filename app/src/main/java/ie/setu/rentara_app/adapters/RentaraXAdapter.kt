@@ -10,7 +10,7 @@ import ie.setu.rentara_app.models.RentaraModel
 interface RentaraClickListener {
     fun onListingClick(rental: RentaraModel)
 }
-class RentaraXAdapter constructor(private var rentals: ArrayList<RentaraModel>,private val listener: RentaraClickListener)
+class RentaraXAdapter(private var rentals: ArrayList<RentaraModel>, private val listener: RentaraClickListener)
     : RecyclerView.Adapter<RentaraXAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {

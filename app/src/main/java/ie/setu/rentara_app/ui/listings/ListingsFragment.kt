@@ -45,13 +45,9 @@ class ListingsFragment : Fragment(), RentaraClickListener {
     private val listingsViewModel: ListingsViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _fragBinding = FragmentListingsBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()

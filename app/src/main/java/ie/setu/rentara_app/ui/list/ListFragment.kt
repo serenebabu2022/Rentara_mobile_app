@@ -34,12 +34,8 @@ class ListFragment : Fragment() {
     private val listingViewModel: ListingsViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         _fragBinding = FragmentListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()
@@ -58,7 +54,7 @@ class ListFragment : Fragment() {
         }
         setButtonListener(fragBinding)
 
-        return root;
+        return root
     }
 
     private fun render(status: Boolean) {
@@ -119,10 +115,4 @@ class ListFragment : Fragment() {
         _fragBinding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-//        totalDonated = reportViewModel.observableDonationsList.value!!.sumOf { it.amount }
-//        fragBinding.progressBar.progress = totalDonated
-//        fragBinding.totalSoFar.text = String.format(getString(R.string.totalSoFar),totalDonated)
-    }
 }

@@ -37,6 +37,8 @@ class Login : AppCompatActivity() {
             createAccount(loginBinding.fieldEmail.text.toString(),
                 loginBinding.fieldPassword.text.toString())
         }
+        loginBinding.googleSignInButton.setOnClickListener { googleSignIn() }
+
         loginBinding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
         loginBinding.googleSignInButton.setColorScheme(0)
     }
@@ -51,7 +53,7 @@ class Login : AppCompatActivity() {
 
         loginRegisterViewModel.firebaseAuthManager.errorStatus.observe(this, Observer
         { status -> checkStatus(status) })
-        loginBinding.googleSignInButton.setOnClickListener { googleSignIn() }
+        setupGoogleSignInCallback()
     }
 
     //Required to exit app from Login Screen - must investigate this further
