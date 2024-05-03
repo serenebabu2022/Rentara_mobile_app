@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
     app:startDestination="@id/listingsFragment">
+
     <fragment
         android:id="@+id/listFragment"
         android:name="ie.setu.rentara.ui.list.ListFragment"
@@ -18,16 +19,18 @@
     <fragment
         android:id="@+id/listingsFragment"
         android:name="ie.setu.rentara.ui.listings.ListingsFragment"
-        android:label="@string/myListingsTitle"
+        android:label="@string/action_my_listings"
         tools:layout="@layout/fragment_listings" >
         <action
             android:id="@+id/action_listingsFragment_to_listFragment"
             app:destination="@id/listFragment"
+            app:popUpTo="@id/main_navigation"
+            app:popUpToInclusive="true"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_listingsFragment_to_listingDetailFragment"
-            app:destination="@id/listingDetailFragment" />
+            app:destination="@id/donationDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -35,9 +38,9 @@
         android:label="@string/action_about"
         tools:layout="@layout/fragment_aboutus" />
     <fragment
-        android:id="@+id/listingDetailFragment"
+        android:id="@+id/donationDetailFragment"
         android:name="ie.setu.rentara_app.ui.detail.ListingDetailFragment"
-        android:label="@string/listingDetails"
+        android:label="Donation Detail"
         tools:layout="@layout/fragment_listing_detail" >
         <action
             android:id="@+id/action_listingDetailFragment_to_listingsFragment"
@@ -46,5 +49,4 @@
             android:name="listingid"
             app:argType="string" />
     </fragment>
-
 </navigation>

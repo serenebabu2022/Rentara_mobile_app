@@ -39,14 +39,14 @@ class ListingDetailFragment : Fragment() {
         listingDetailViewModel.observableListing.observe(viewLifecycleOwner, Observer { render() })
 
         fragBinding.editListingButton.setOnClickListener {
-            listingDetailViewModel.updateListing(loggedInViewModel.liveFirebaseUser.value?.email!!,
+            listingDetailViewModel.updateListing(loggedInViewModel.liveFirebaseUser.value?.uid!!,
                 args.listingid, fragBinding.rentaravm?.observableListing!!.value!!)
             findNavController().navigateUp()
         }
 
         fragBinding.deleteListingButton.setOnClickListener {
             listingsViewModel.delete(loggedInViewModel.liveFirebaseUser.value?.email!!,
-                listingDetailViewModel.observableListing.value?._id!!)
+                listingDetailViewModel.observableListing.value?.uid!!)
             findNavController().navigateUp()
         }
 
@@ -60,7 +60,7 @@ class ListingDetailFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        listingDetailViewModel.getListing(loggedInViewModel.liveFirebaseUser.value?.email!!,args.listingid)
+        listingDetailViewModel.getListing(loggedInViewModel.liveFirebaseUser.value?.uid!!,args.listingid)
     }
     override fun onDestroyView() {
         super.onDestroyView()

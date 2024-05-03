@@ -25,20 +25,23 @@ import ie.setu.rentara_app.models.RentaraModel
 import ie.setu.rentara_app.ui.auth.LoggedInViewModel
 
 class ListFragment : Fragment() {
+
     var totalListings = 0
     private var _fragBinding: FragmentListBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val fragBinding get() = _fragBinding!!
     private lateinit var listViewModel: ListViewModel
-
-    private val listingsViewModel: ListingsViewModel by activityViewModels()
+    private val listingViewModel: ListingsViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _fragBinding = FragmentListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = getString(R.string.action_list)
         setupMenu()
         listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
         listViewModel.observableStatus.observe(viewLifecycleOwner, Observer {
@@ -54,24 +57,8 @@ class ListFragment : Fragment() {
             fragBinding.paymentAmount.setText("$newVal")
         }
         setButtonListener(fragBinding)
+
         return root;
-    }
-
-    private fun setupMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
-            override fun onPrepareMenu(menu: Menu) {
-                // Handle for example visibility of menu items
-            }
-
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_list, menu)
-            }
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Validate and handle the selected menu item
-                println("there")
-                return NavigationUI.onNavDestinationSelected(menuItem,
-                    requireView().findNavController())
-            }       }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun render(status: Boolean) {
@@ -88,6 +75,12 @@ class ListFragment : Fragment() {
 
     fun setButtonListener(layout: FragmentListBinding) {
         layout.listButton.setOnClickListener {
+            val title=if (layout.productTitle.text.isNotEmpty())
+                layout.productTitle.text.toString()
+            else "Product title"
+            val description=if (layout.productDescription.text.isNotEmpty())
+                layout.productDescription.text.toString()
+            else "Product description"
             val amount = if (layout.paymentAmount.text.isNotEmpty())
                 layout.paymentAmount.text.toString().toInt()
             else layout.amountPicker.value
@@ -96,34 +89,40 @@ class ListFragment : Fragment() {
                     "Daily" else "Weekly"
 //                app.listStore.create(RentaraModel(rentalPeriodType = rentalType, price = amount))
 //                layout.rentalPeriodType.tex=rentalType
-                listViewModel.addListing(RentaraModel(rentalPeriodType = rentalType , price = amount,email = loggedInViewModel.liveFirebaseUser.value?.email!!))
+                listViewModel.addListing(loggedInViewModel.liveFirebaseUser,
+                    RentaraModel(title =title, description = description, rentalPeriodType = rentalType, price = amount,
+                        email = loggedInViewModel.liveFirebaseUser.value?.email!!))
             }
         }
+    }
+
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // Handle for example visibility of menu items
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_list, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Validate and handle the selected menu item
+                return NavigationUI.onNavDestinationSelected(menuItem,
+                    requireView().findNavController())
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
     }
+
     override fun onResume() {
         super.onResume()
-        //try implementing updation of listings count
-//        listingsViewModel.rentalsList.observe(viewLifecycleOwner, { rentals ->
-//            // Filter rentals by user email (replace with your logic to get user email)
-//            val userRentals = rentals.filter { it.email == userEmail }
-//
-//            // Display the number of listings
-//            val numListings = userRentals.count()
-//            val listingsText = "You have $numListings listings."
-//            // Update UI with listingsText
-//        })
-//        totalListings = listingsViewModel.observableRentalsList.value!!.sumOf { it.email==loggedInViewModel.liveFirebaseUser.value?.email!! }
-//
-////        val listingsViewModel = ViewModelProvider(this).get(ListingsViewModel::class.java)
-//        listingsViewModel.observableRentalsList.observe(viewLifecycleOwner, Observer {
-////            totalDonated = reportViewModel.observableDonationsList.value!!.sumOf { it.amount }
-////            fragBinding.
-////            fragBinding.totalSoFar.text = getString(R.string.totalSoFar,totalDonated)
-//        })
+//        totalDonated = reportViewModel.observableDonationsList.value!!.sumOf { it.amount }
+//        fragBinding.progressBar.progress = totalDonated
+//        fragBinding.totalSoFar.text = String.format(getString(R.string.totalSoFar),totalDonated)
     }
 }

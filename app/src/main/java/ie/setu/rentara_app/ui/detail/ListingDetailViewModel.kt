@@ -3,7 +3,7 @@ package ie.setu.rentara_app.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ie.setu.rentara_app.models.RentaraManager
+import ie.setu.rentara_app.firebase.FirebaseDBManager
 import ie.setu.rentara_app.models.RentaraModel
 import timber.log.Timber
 
@@ -14,9 +14,9 @@ class ListingDetailViewModel : ViewModel() {
         get() = listing
         set(value) {listing.value = value.value}
 
-    fun getListing(email:String, id: String) {
+    fun getListing(userid:String, id: String) {
         try {
-            RentaraManager.findById(email, id, listing)
+            FirebaseDBManager.findById(userid, id, listing)
             Timber.i("Detail getListing() Success : ${listing.value.toString()}")
         }
         catch (e: Exception) {
@@ -24,9 +24,9 @@ class ListingDetailViewModel : ViewModel() {
         }
     }
 
-    fun updateListing(email:String, id: String,listing: RentaraModel) {
+    fun updateListing(userid:String, id: String,listing: RentaraModel) {
         try {
-            RentaraManager.update(email, id, listing)
+            FirebaseDBManager.update(userid, id, listing)
             Timber.i("Detail update() Success : $listing")
         }
         catch (e: Exception) {

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import ie.setu.rentara.ui.list.ListFragment
 import ie.setu.rentara_app.R
 import ie.setu.rentara_app.adapters.RentaraClickListener
 import ie.setu.rentara_app.adapters.RentaraXAdapter
@@ -36,25 +37,23 @@ import ie.setu.rentara_app.utils.hideLoader
 import ie.setu.rentara_app.utils.showLoader
 
 
-class ListingsFragment : Fragment(),RentaraClickListener {
-    lateinit var app: RentaraXApp
+class ListingsFragment : Fragment(), RentaraClickListener {
+
     private var _fragBinding: FragmentListingsBinding? = null
-    lateinit var loader : AlertDialog
     private val fragBinding get() = _fragBinding!!
+    lateinit var loader : AlertDialog
     private val listingsViewModel: ListingsViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?
     ): View? {
         _fragBinding = FragmentListingsBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        loader = createLoader(requireActivity())
-
         setupMenu()
         loader = createLoader(requireActivity())
 
@@ -63,24 +62,25 @@ class ListingsFragment : Fragment(),RentaraClickListener {
             val action = ListingsFragmentDirections.actionListingsFragmentToListFragment()
             findNavController().navigate(action)
         }
-
         showLoader(loader,"Downloading Listings")
         listingsViewModel.observableRentalsList.observe(viewLifecycleOwner, Observer {
-                rentals ->
-            rentals?.let {
-                render(rentals as ArrayList<RentaraModel>)
+                listings ->
+            listings?.let {
+                render(listings as ArrayList<RentaraModel>)
                 hideLoader(loader)
                 checkSwipeRefresh()
             }
         })
+
         setSwipeRefresh()
+
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 showLoader(loader,"Deleting Listing")
                 val adapter = fragBinding.recyclerView.adapter as RentaraXAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
-                listingsViewModel.delete(listingsViewModel.liveFirebaseUser.value?.email!!,
-                    (viewHolder.itemView.tag as RentaraModel)._id)
+                listingsViewModel.delete(listingsViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as RentaraModel).uid!!)
 
                 hideLoader(loader)
             }
@@ -98,6 +98,8 @@ class ListingsFragment : Fragment(),RentaraClickListener {
 
         return root
     }
+
+
     private fun setupMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
@@ -115,6 +117,7 @@ class ListingsFragment : Fragment(),RentaraClickListener {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
     private fun render(rentalsList: ArrayList<RentaraModel>) {
         fragBinding.recyclerView.adapter = RentaraXAdapter(rentalsList,this)
         if (rentalsList.isEmpty()) {
@@ -125,6 +128,12 @@ class ListingsFragment : Fragment(),RentaraClickListener {
             fragBinding.rentalsNotFound.visibility = View.GONE
         }
     }
+
+    override fun onListingClick(listing: RentaraModel) {
+        val action = ListingsFragmentDirections.actionListingsFragmentToListingDetailFragment(listing.uid!!)
+        findNavController().navigate(action)
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swiperefresh.setOnRefreshListener {
             fragBinding.swiperefresh.isRefreshing = true
@@ -149,13 +158,9 @@ class ListingsFragment : Fragment(),RentaraClickListener {
         })
         //hideLoader(loader)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
-    }
-
-    override fun onListingClick(rental: RentaraModel) {
-        val action = ListingsFragmentDirections.actionListingsFragmentToListingDetailFragment(rental._id)
-        findNavController().navigate(action)
     }
 }
