@@ -1,8 +1,13 @@
 package ie.setu.rentara_app.utils
 
 import android.app.AlertDialog
+import android.content.Intent
+import android.graphics.Color
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
+import com.makeramen.roundedimageview.RoundedTransformationBuilder
+import com.squareup.picasso.Transformation
 import ie.setu.rentara_app.R
 
 fun createLoader(activity: FragmentActivity) : AlertDialog {
@@ -42,4 +47,17 @@ fun serviceAvailableMessage(activity: FragmentActivity) {
         "Rentara service Contacted Successfully",
         Toast.LENGTH_LONG
     ).show()
+}
+fun customTransformation() : Transformation =
+    RoundedTransformationBuilder()
+        .borderColor(Color.WHITE)
+        .borderWidthDp(2F)
+        .cornerRadiusDp(35F)
+        .oval(false)
+        .build()
+fun showImagePicker(intentLauncher : ActivityResultLauncher<Intent>) {
+    var chooseFile = Intent(Intent.ACTION_OPEN_DOCUMENT)
+    chooseFile.type = "image/*"
+    chooseFile = Intent.createChooser(chooseFile, R.string.select_profile_image.toString())
+    intentLauncher.launch(chooseFile)
 }

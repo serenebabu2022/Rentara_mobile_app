@@ -25,6 +25,10 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">30sp</item>
     </style>
+    <style name="ThemeOverlay.ProductTitle" parent="Theme.Rentara_app">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
     <style name="Theme.Rentara_app.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Rentara_app.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -50,5 +54,9 @@
         <item name="android:padding">4dp</item>
         <item name="android:scrollbars">vertical</item>
         <item name="android:textSize">14sp</item>
+    </style>
+    <style name="toggleStyle">
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/black</item>
     </style>
 </resources>

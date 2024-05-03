@@ -17,22 +17,29 @@ class ListingsViewModel : ViewModel() {
             get() = rentalsList
 
         var liveFirebaseUser = MutableLiveData<FirebaseUser>()
-
+    var readOnly = MutableLiveData(false)
         init { load() }
 
         fun load() {
             try {
-                println("rentalslist ${rentalsList.value}")
-//                RentaraManager.findAll(liveFirebaseUser.value?.email!!, rentalsList)
+                readOnly.value = false
                 FirebaseDBManager.findAll(liveFirebaseUser.value?.uid!!,rentalsList)
-
                 Timber.i("Report Load Success : ${rentalsList.value.toString()}")
             }
             catch (e: Exception) {
                 Timber.i("Report Load Error : $e.message")
             }
         }
-
+    fun loadAll() {
+        try {
+            readOnly.value = true
+            FirebaseDBManager.findAll(rentalsList)
+            Timber.i("Report LoadAll Success : ${rentalsList.value.toString()}")
+        }
+        catch (e: Exception) {
+            Timber.i("Report LoadAll Error : $e.message")
+        }
+    }
     fun delete(userid: String, id: String) {
         try {
             //DonationManager.delete(userid,id)

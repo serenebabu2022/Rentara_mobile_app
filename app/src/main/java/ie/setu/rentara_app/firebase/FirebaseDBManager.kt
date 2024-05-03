@@ -14,7 +14,25 @@ import timber.log.Timber
 object FirebaseDBManager: RentaraStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
     override fun findAll(rentalsList: MutableLiveData<List<RentaraModel>>) {
-        TODO("Not yet implemented")
+        database.child("listing")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase Listing error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val localList = ArrayList<RentaraModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                        val listing = it.getValue(RentaraModel::class.java)
+                        localList.add(listing!!)
+                    }
+                    database.child("listing")
+                        .removeEventListener(this)
+
+                    rentalsList.value = localList
+                }
+            })
     }
 
     override fun findAll(userid: String, listingsList: MutableLiveData<List<RentaraModel>>) {

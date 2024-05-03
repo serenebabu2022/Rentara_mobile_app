@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -104,6 +105,16 @@ class ListingsFragment : Fragment(), RentaraClickListener {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_my_listings, menu)
+
+                val item = menu.findItem(R.id.toggleListings) as MenuItem
+                item.setActionView(R.layout.togglebutton_layout)
+                val toggleDonations: SwitchCompat = item.actionView!!.findViewById(R.id.toggleButton)
+                toggleDonations.isChecked = false
+
+                toggleDonations.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) listingsViewModel.loadAll()
+                    else listingsViewModel.load()
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -115,7 +126,7 @@ class ListingsFragment : Fragment(), RentaraClickListener {
     }
 
     private fun render(rentalsList: ArrayList<RentaraModel>) {
-        fragBinding.recyclerView.adapter = RentaraXAdapter(rentalsList,this)
+        fragBinding.recyclerView.adapter = RentaraXAdapter(rentalsList,this,listingsViewModel.readOnly.value!!)
         if (rentalsList.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE
             fragBinding.rentalsNotFound.visibility = View.VISIBLE
@@ -127,14 +138,18 @@ class ListingsFragment : Fragment(), RentaraClickListener {
 
     override fun onListingClick(listing: RentaraModel) {
         val action = ListingsFragmentDirections.actionListingsFragmentToListingDetailFragment(listing.uid!!)
-        findNavController().navigate(action)
+        if(!listingsViewModel.readOnly.value!!)
+            findNavController().navigate(action)
     }
 
     private fun setSwipeRefresh() {
         fragBinding.swiperefresh.setOnRefreshListener {
             fragBinding.swiperefresh.isRefreshing = true
             showLoader(loader,"Downloading Listings")
-            listingsViewModel.load()
+            if(listingsViewModel.readOnly.value!!)
+                listingsViewModel.loadAll()
+            else
+                listingsViewModel.load()
         }
     }
 

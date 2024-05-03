@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -19,6 +21,8 @@ import ie.setu.rentara_app.ui.auth.LoggedInViewModel
 import ie.setu.rentara_app.ui.auth.Login
 import ie.setu.rentara_app.databinding.HomeBinding
 import ie.setu.rentara_app.databinding.NavHeaderBinding
+import ie.setu.rentara_app.utils.showImagePicker
+import timber.log.Timber
 
 class Home : AppCompatActivity() {
 
@@ -27,6 +31,8 @@ class Home : AppCompatActivity() {
     private lateinit var navHeaderBinding : NavHeaderBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var loggedInViewModel : LoggedInViewModel
+    private lateinit var headerView : View
+    private lateinit var intentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +54,7 @@ class Home : AppCompatActivity() {
 
         val navView = homeBinding.navView
         navView.setupWithNavController(navController)
+        initNavHeader()
     }
 
     public override fun onStart() {
@@ -64,6 +71,14 @@ class Home : AppCompatActivity() {
             }
         })
 
+    }
+    private fun initNavHeader() {
+        Timber.i("DX Init Nav Header")
+        headerView = homeBinding.navView.getHeaderView(0)
+        navHeaderBinding = NavHeaderBinding.bind(headerView)
+        navHeaderBinding.navHeaderImage.setOnClickListener {
+            showImagePicker(intentLauncher)
+        }
     }
 
     private fun updateNavHeader(currentUser: FirebaseUser) {

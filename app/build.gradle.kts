@@ -54,6 +54,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.0")
     testImplementation("junit:junit:4.13.2")
     implementation("com.jakewharton.timber:timber:5.0.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -68,4 +69,6 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.fragment:fragment-ktx:1.7.0")
     implementation("com.google.android.gms:play-services-auth:21.1.1")
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.makeramen:roundedimageview:2.3.0")
 }
