@@ -2,7 +2,9 @@ package ie.setu.rentara_app.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import ie.setu.rentara_app.R
 import ie.setu.rentara_app.databinding.CardListingBinding
 import ie.setu.rentara_app.databinding.ProductItemBinding
@@ -43,7 +45,11 @@ class RentaraXAdapter(private var listings: ArrayList<RentaraModel>,
         fun bind(listing: RentaraModel, listener: RentaraClickListener) {
             binding.root.tag = listing
             binding.rentals = listing
-            binding.imageIcon.setImageResource(R.mipmap.ic_launcher_round)
+            Picasso.get().load(listing.productPic.toUri())
+                .resize(200, 200)
+//                .transform(customTransformation())
+                .centerCrop()
+                .into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onListingClick(listing) }
             binding.executePendingBindings()
         }

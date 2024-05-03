@@ -1,5 +1,6 @@
 package ie.setu.rentara.ui.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,6 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -20,9 +24,13 @@ import androidx.navigation.ui.NavigationUI
 import ie.setu.rentara.ui.listings.ListingsViewModel
 import ie.setu.rentara_app.R
 import ie.setu.rentara_app.databinding.FragmentListBinding
+import ie.setu.rentara_app.firebase.FirebaseImageManager
 import ie.setu.rentara_app.main.RentaraXApp
 import ie.setu.rentara_app.models.RentaraModel
 import ie.setu.rentara_app.ui.auth.LoggedInViewModel
+import ie.setu.rentara_app.utils.readImageUri
+import ie.setu.rentara_app.utils.showImagePicker
+import timber.log.Timber
 
 class ListFragment : Fragment() {
 
@@ -33,6 +41,7 @@ class ListFragment : Fragment() {
     private lateinit var listViewModel: ListViewModel
     private val listingViewModel: ListingsViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    private lateinit var intentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -53,10 +62,15 @@ class ListFragment : Fragment() {
             fragBinding.paymentAmount.setText("$newVal")
         }
         setButtonListener(fragBinding)
+uploadProductImage(fragBinding)
+        registerImagePickerCallback()
 
         return root
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
     private fun render(status: Boolean) {
         when (status) {
             true -> {
@@ -91,7 +105,29 @@ class ListFragment : Fragment() {
             }
         }
     }
-
+    fun uploadProductImage(layout: FragmentListBinding){
+        layout.productPicture.setOnClickListener{
+showImagePicker(intentLauncher)
+        }
+    }
+private fun registerImagePickerCallback(){
+    intentLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when(result.resultCode){
+                AppCompatActivity.RESULT_OK -> {
+                    if (result.data != null) {
+                        Timber.i("DX registerPickerCallback() ${readImageUri(result.resultCode, result.data).toString()}")
+                        FirebaseImageManager
+                            .updateProductImage(loggedInViewModel.liveFirebaseUser.value!!.uid,
+                                readImageUri(result.resultCode, result.data),
+                                fragBinding.productPicture,
+                                true)
+                    } // end of if
+                }
+                AppCompatActivity.RESULT_CANCELED -> { } else -> { }
+            }
+        }
+}
     private fun setupMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
