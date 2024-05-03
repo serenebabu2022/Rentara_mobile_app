@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "468910432088",
+    "firebase_url": "https://rentara-e6df6-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "rentara-e6df6",
+    "storage_bucket": "rentara-e6df6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468910432088:android:cbc47f93a2a6188feecf2d",
+        "android_client_info": {
+          "package_name": "ie.setu.rentara_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468910432088-gast16vfnp7r4qmlcpicd2bi52s609k7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ie.setu.rentara_app",
+            "certificate_hash": "7d261966321584e3e81b0cdf1a3d924e64c10611"
+          }
+        },
+        {
+          "client_id": "468910432088-r4us88tfnk9io6f63btaga1tjt8ecbfs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoMzIkpYm0G3vanepMSrLahdcDkJgDpMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468910432088-r4us88tfnk9io6f63btaga1tjt8ecbfs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

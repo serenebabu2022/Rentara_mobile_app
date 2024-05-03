@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:elevation="24dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="rentals"
+            type="ie.setu.rentara_app.models.RentaraModel" />
+    </data>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:elevation="24dp">
     <RelativeLayout
+        android:id="@+id/cardListing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -20,7 +26,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@mipmap/ic_launcher_round"
+            app:srcCompat="@mipmap/ic_launcher"
             android:contentDescription="@string/app_name" />
 
         <TextView
@@ -32,7 +38,7 @@
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@+id/imageIcon"
             android:textSize="24sp"
-            tools:text="€5" />
+           android:text="@{Integer.toString(rentals.price)}"/>
 
         <TextView
             android:id="@+id/rentalPeriodType"
@@ -42,8 +48,19 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@+id/paymentamount"
-            android:text="@string/rentDaily"
+            android:text="@{rentals.rentalPeriodType}"
             android:textSize="24sp" />
-
+        <ImageView
+            android:id="@+id/imagefavourite"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toEndOf="@id/rentalPeriodType"
+            app:srcCompat="@android:drawable/star_big_off" />
     </RelativeLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>
