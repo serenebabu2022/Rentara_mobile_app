@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import ie.setu.rentara_app.firebase.FirebaseDBManager
+import ie.setu.rentara_app.firebase.FirebaseImageManager
 import ie.setu.rentara_app.models.RentaraModel
 
 class ListViewModel : ViewModel() {
@@ -17,7 +18,7 @@ class ListViewModel : ViewModel() {
     fun addListing(firebaseUser: MutableLiveData<FirebaseUser>,
                    listing: RentaraModel) {
         status.value = try {
-            //DonationManager.create(donation)
+            listing.productPic = FirebaseImageManager.imageUri.value.toString()
             FirebaseDBManager.create(firebaseUser,listing)
             true
         } catch (e: IllegalArgumentException) {

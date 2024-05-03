@@ -8,59 +8,78 @@
             name="rentals"
             type="ie.setu.rentara_app.models.RentaraModel" />
     </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:elevation="24dp">
-    <RelativeLayout
-        android:id="@+id/cardListing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/imageIcon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="16dp"
-            app:srcCompat="@mipmap/ic_launcher"
-            android:contentDescription="@string/app_name" />
-
-        <TextView
-            android:id="@+id/paymentamount"
-            android:layout_width="121dp"
+        <RelativeLayout
+            android:id="@+id/cardListing"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@+id/imageIcon"
-            android:textSize="24sp"
-           android:text="@{Integer.toString(rentals.price)}"/>
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/rentalPeriodType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@+id/paymentamount"
-            android:text="@{rentals.rentalPeriodType}"
-            android:textSize="24sp" />
-        <ImageView
-            android:id="@+id/imagefavourite"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@id/rentalPeriodType"
-            app:srcCompat="@android:drawable/star_big_off" />
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/imageIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/paymentamount"
+                android:layout_width="87dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/imageIcon"
+                android:text="@{Integer.toString(rentals.price)}"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                tools:text="€1000" />
+
+            <TextView
+                android:id="@+id/rentalPeriodType"
+                android:layout_width="88dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/paymentamount"
+                android:text="@{rentals.rentalPeriodType}"
+                android:textColor="@color/black"
+                android:textSize="24sp"/>
+
+            <ImageView
+                android:id="@+id/imagefavourite"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@id/rentalPeriodType"
+                app:srcCompat="@android:drawable/star_big_off" />
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/paymentamount"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/imageIcon"
+                android:text="@{rentals.description}"
+                android:textColor="@color/color_primary"
+                tools:text="Description" />
+
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </layout>

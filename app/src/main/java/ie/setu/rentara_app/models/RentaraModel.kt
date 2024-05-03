@@ -13,6 +13,7 @@ data class RentaraModel(
     var description: String = "",
     var rentalPeriodType: String = "",
     var price: Int = 0,
+    var productPic: String = "",
     var email: String? = "joe@bloggs.com")
     : Parcelable
 {
@@ -23,6 +24,7 @@ data class RentaraModel(
             "title" to title,
             "description" to description,
             "rentalPeriodType" to rentalPeriodType,
+            "productPic" to productPic,
             "price" to price,
             "email" to email
         )
